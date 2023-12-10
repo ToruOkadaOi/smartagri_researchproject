@@ -8,7 +8,7 @@ qgis_documentation_method.py - for the merging method #unfinished
 
 R.P Smart farming has all the data
 
-output_data is the folder where the files will go to when executed
+output_data is the folder where the files will go to when executed. Clear all the folders starting with the name shapefiles_* if desired
 
 Update the excel file and shapefile paths as per need in the Scripttt.py file
 

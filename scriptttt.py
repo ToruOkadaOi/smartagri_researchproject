@@ -25,6 +25,7 @@ for l in ls:
     layer.selectByExpression(f'"Jahr"={l}')
     directory_path = f"C:\\Users\\Aman\\Desktop\\local_RP\\output_data\\shapefiles_{l}"
 
+    #Borrowed from GIS stackexchange
     # Check if the directory exists
     if not os.path.exists(directory_path):
         # Create the directory if it doesn't exist
@@ -69,6 +70,7 @@ alayer = QgsProject.instance().mapLayersByName("boundaries+f")[0]
 iface.setActiveLayer(layer)
 #print(iface.activeLayer())
 
+#Run the below function years from 2008 to 2017. Changes could be made to include the rest of the years instead of a for loop
 def ultimate_function(year):
     
     xlayer = QgsVectorLayer(f'C:\\Users\\Aman\\Desktop\\local_RP\\R.P Smart Farming\\{year}.xlsx', 'test', 'ogr')
@@ -80,8 +82,7 @@ def ultimate_function(year):
 
 
     print(schlag_names)
-
-    ##GPT Code
+    
     expression = ""
     for name in schlag_names:
         if expression:
@@ -89,13 +90,10 @@ def ultimate_function(year):
         expression += f'"Name"=\'{name}\''
 
     print(expression)
-    
-    # Specify the directory path
+        
     directory_path = f"C:\\Users\\Aman\\Desktop\\local_RP\\output_data\\shapefiles_{year}"
-
-    # Check if the directory exists
-    if not os.path.exists(directory_path):
-        # Create the directory if it doesn't exist
+    
+    if not os.path.exists(directory_path):    
         os.makedirs(directory_path)
         print("Directory '{}' created successfully".format(directory_path))
     else:
@@ -140,7 +138,5 @@ for num in range(2008, 2018):
     
     
 #Merge Section
-
-#Push to Git Repo
 
 print('EoF')
