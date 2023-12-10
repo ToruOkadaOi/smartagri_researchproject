@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<OGRVRTDataSource>
+    <OGRVRTLayer name="2012-2012">
+        <SrcDataSource relativeToVRT="1">2012.xlsx</SrcDataSource>
+        <!--Header=False-->
+        <SrcLayer>2012</SrcLayer>
+        <Field name="No." src="No." type="Integer"/>
+        <Field name="Schlag" src="Schlag" type="String"/>
+        <Field name="Jahr/Year" src="Jahr/Year" type="Integer"/>
+        <Field name="Groeße (ha)" src="Groeße (ha)" type="Real"/>
+        <Field name="Hauptfrucht" src="Hauptfrucht" type="String"/>
+        <Field name="Datum Saat.1" src="Datum Saat.1" type="Date"/>
+        <Field name="Saatgutmenge/Saatstaerke" src="Saatgutmenge/Saatstaerke" type="String"/>
+        <Field name="Datum" src="Datum" type="Date"/>
+        <Field name="Ertrag (dt/ha)" src="Ertrag (dt/ha)" type="Real"/>
+        <Field name="Fertilizer" src="Fertilizer" type="String"/>
+        <Field name="Datum Saat" src="Datum Saat" type="String"/>
+    </OGRVRTLayer>
+</OGRVRTDataSource>
