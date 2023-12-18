@@ -4,6 +4,7 @@ import pandas as pd
 import csv
 import processing
 import os
+import time
 
 print("\n" * 100)
 
@@ -64,9 +65,6 @@ for l in ls:
     excel_layer = QgsVectorLayer(f'C:\\Users\\Aman\\Desktop\\local_RP\\R.P Smart Farming\\{l}.xlsx', f'excel_layer_{l}', "ogr")
     QgsProject.instance().addMapLayer(excel_layer)    
 
-
-alayer = QgsProject.instance().mapLayersByName("boundaries+f")[0]
-
 iface.setActiveLayer(layer)
 #print(iface.activeLayer())
 
@@ -77,19 +75,17 @@ def ultimate_function(year):
 
     schlag_names = []
 
+    expressions = []
+
     for i in xlayer.getFeatures():
         schlag_names.append(i[1])
-
-
-    print(schlag_names)
-    
-    expression = ""
-    for name in schlag_names:
-        if expression:
-            expression += " or "
-        expression += f'"Name"=\'{name}\''
-
-    print(expression)
+        expressions.append(f'"Name"=\'{i[1]}\'')
+        fexpressions = list(set(expressions))
+        
+    # Combine expressions with OR operator
+    combined_expression = ' OR '.join(fexpressions)
+    layer.selectByExpression(combined_expression, QgsVectorLayer.SetSelection)
+    print(fexpressions)
         
     directory_path = f"C:\\Users\\Aman\\Desktop\\local_RP\\output_data\\shapefiles_{year}"
     
@@ -99,8 +95,6 @@ def ultimate_function(year):
     else:
         print("Directory '{}' already exists".format(directory_path))
 
-    
-    layer.selectByExpression(expression, QgsVectorLayer.SetSelection)
 
     fn = f'C:\\Users\\Aman\\Desktop\\local_RP\\output_data\\shapefiles_{year}\\shapefile_{year}.shp'
 
@@ -130,13 +124,77 @@ def ultimate_function(year):
     # Update the fields, so the changes are recognized:
     my_vectorlayer.updateFields()
     
+def mergeLayer(num):# Import necessary QGIS modules
+    from qgis.core import QgsVectorLayer, QgsVectorFileWriter, QgsVectorDataProvider, QgsVectorLayerJoinInfo
+    from qgis.PyQt.QtCore import QVariant
+   
+# Path to your vector layer and attribute table
+    vector_layer_path = f'C:\\Users\\Aman\\Desktop\\local_RP\\output_data\\shapefiles_{num}\\shapefile_{num}.shp'
+    xlsx_path = f'C:\\Users\\Aman\\Desktop\\local_RP\\R.P Smart Farming\\{num}.xlsx'
+
+    # Load vector layer
+    vector_layer = QgsVectorLayer(vector_layer_path, 'Vector Layer', 'ogr')
+
+    # Load XLSX layer
+    xlsx_layer = QgsVectorLayer(xlsx_path, 'XLSX Layer', 'ogr')
+
+    # Set the join field names
+    vector_field = 'Name'
+    attribute_field = 'Schlag'
+
+    # Perform the join
+    join_object = QgsVectorLayerJoinInfo()
+    join_object.setJoinFieldName(attribute_field)
+    join_object.setTargetFieldName(vector_field)
+    join_object.setJoinLayerId(xlsx_layer.id())
+    join_object.setUsingMemoryCache(True)
+    join_object.setJoinLayer(xlsx_layer)
+
+    vector_layer.addJoin(join_object)
+
+    # Update the vector layer
+    vector_layer.updateFields()
+
+    # Rename fields in the joined layer based on the original Excel file
+    field_mapping = {}
+    for field in xlsx_layer.fields():
+        original_name = field.name()
+        if vector_layer.fields().indexFromName(original_name) != -1:
+            new_name = f"{original_name}_xlsx"
+            field_mapping[original_name] = new_name
+            vector_layer.renameAttribute(original_name, new_name)
+    
+    vector_layer.commitChanges()
+
+    # Save the result if needed
+    QgsVectorFileWriter.writeAsVectorFormat(vector_layer, f'C:\\Users\\Aman\\Desktop\\local_RP\\output_data\\joined_layers\\joined_layer_{num}.shp', 'utf-8', vector_layer.crs(), 'ESRI Shapefile')
+
+    # Refresh the map canvas
+    iface.mapCanvas().refresh()
+
+    # Import necessary QGIS modules
+    from qgis.core import QgsVectorLayer, QgsProject
+
+    # Path to the saved joined layer
+    joined_layer_path = f'C:\\Users\\Aman\\Desktop\\local_RP\\output_data\\joined_layers\\joined_layer_{num}.shp'
+
+    # Load the joined layer
+    joined_layer = QgsVectorLayer(joined_layer_path, f'Joined Layer {num}', 'ogr')
+
+    # Add the layer to the QGIS project
+    QgsProject.instance().addMapLayer(joined_layer)
+
+    # Refresh the map canvas
+    iface.mapCanvas().refresh()
+
+print('Joined layer imported into QGIS GUI')
+print('Done')
 
 for num in range(2008, 2018):
     excel_layer = QgsVectorLayer(f'C:\\Users\\Aman\\Desktop\\local_RP\\R.P Smart Farming\\{num}.xlsx', f'excel_layer_{num}', "ogr")
     QgsProject.instance().addMapLayer(excel_layer)
     ultimate_function(num)
-    
-    
-#Merge Section
+    time.sleep(10)
+    mergeLayer(num)
 
 print('EoF')
