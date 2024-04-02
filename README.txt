@@ -1,6 +1,6 @@
 #README
 
-Scripttt.py in folder 3 is the project specific python code used for initial data procesing in QGIS as explained in the report.docx. 
+Script.py is the project specific code used for initial data procesing in QGIS.
 
 Generic code given alongside. Additional code for geo coding and reverse geo coding
 
