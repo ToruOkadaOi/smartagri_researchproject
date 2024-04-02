@@ -1,15 +1,13 @@
 #README
 
-Scripttt.py is the main code file
+Scripttt.py in folder 3 is the project specific python code used for initial data procesing in QGIS as explained in the report.docx. Generic code given alongside. Additional code for geo coding and reverse geo coding also added
 
-rm -rf.py clears the layers from QGIS
+Folder 4 contains the JavaScript code specifically used for this project along with code for deployment as a web app
 
-qgis_documentation_method.py - for the merging method #unfinished
+Update the excel file and shapefile paths as per need
 
-R.P Smart farming has all the data
+Modify as per use case
 
-output_data is the folder where the files will go to when executed. Clear all the folders starting with the name shapefiles_* if desired
-
-Update the excel file and shapefile paths as per need in the Scripttt.py file
+References given in the reference section of report.docx
 
 Thank you!!!
